@@ -1,8 +1,18 @@
-from api.serializers import TransactionSerializer
-from portfolio.models import Transaction
+from api.serializers import AssetSerializer, TransactionSerializer
+from portfolio.models import Asset, Transaction
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
+
+class AssetsListView(generics.ListAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    serializer_class = AssetSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+
+        return Asset.objects.filter(user=user)
 
 class TransactionsListView(generics.ListAPIView):
     authentication_classes = [JWTAuthentication]

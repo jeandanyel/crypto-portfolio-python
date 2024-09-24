@@ -2,6 +2,13 @@ from api.exceptions import AtLeastOneAssetRequiredError, CryptocurrencyNotFoundE
 from portfolio.models import Asset, Cryptocurrency, Transaction
 from rest_framework import serializers
 
+class AssetSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    class Meta:
+        model = Asset
+        fields = '__all__'
+
 class TransactionSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
