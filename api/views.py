@@ -16,3 +16,10 @@ class TransactionUpdateView(generics.UpdateAPIView):
     queryset = Transaction.objects.all()
     serializer_class = TransactionSerializer
     lookup_field = 'id'
+
+class TransactionDeleteView(generics.DestroyAPIView):
+    authentication_classes = [JWTAuthentication]
+    permission_classes = [IsAuthenticated]
+    queryset = Transaction.objects.all()
+    serializer_class = TransactionSerializer
+    lookup_field = 'id'
