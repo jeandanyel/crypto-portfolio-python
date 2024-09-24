@@ -3,6 +3,8 @@ from portfolio.models import Asset, Cryptocurrency, Transaction
 from rest_framework import serializers
 
 class TransactionSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
     class Meta:
         model = Transaction
         fields = '__all__'
@@ -22,6 +24,7 @@ class TransactionSerializer(serializers.ModelSerializer):
     def to_internal_value(self, data):
         received_asset = data.get('received_asset')
         transacted_asset = data.get('transacted_asset')
+        user = self.context['request'].user
 
         if received_asset:
             try:
@@ -29,7 +32,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             except Cryptocurrency.DoesNotExist:
                 raise CryptocurrencyNotFoundError('received_asset', received_asset)
 
-            asset, created = Asset.objects.get_or_create(cryptocurrency=cryptocurrency)
+            asset, created = Asset.objects.get_or_create(cryptocurrency=cryptocurrency, user=user)
             data['received_asset'] = asset.pk
         
         if transacted_asset:
@@ -38,7 +41,7 @@ class TransactionSerializer(serializers.ModelSerializer):
             except Cryptocurrency.DoesNotExist:
                 raise CryptocurrencyNotFoundError('transacted_asset', transacted_asset)
 
-            asset, created = Asset.objects.get_or_create(cryptocurrency=cryptocurrency)
+            asset, created = Asset.objects.get_or_create(cryptocurrency=cryptocurrency, user=user)
             data['transacted_asset'] = asset.pk
         
         return super().to_internal_value(data)

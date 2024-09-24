@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
 
@@ -13,6 +14,7 @@ class Cryptocurrency(models.Model):
 class Asset(models.Model):
     cryptocurrency = models.ForeignKey(Cryptocurrency, on_delete=models.CASCADE)
     quantity = models.FloatField(default=0)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -49,6 +51,10 @@ class Transaction(models.Model):
         related_name='transactions_as_received',
         null=True
     )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=False, blank=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
         return f"{self.type} transaction on {self.date}"
