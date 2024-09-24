@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,10 +23,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-gqnfqu^=a$$7-glta7&%4f&+%-kgv21p)zg0nta-j#z%ky@(%u'
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -98,15 +100,9 @@ WSGI_APPLICATION = 'cryptofolio.wsgi.application'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'django_cryptofolio',
-        'USER': 'django_user',
-        'PASSWORD': 's&2e0?nU8L3x+',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(default=os.environ.get('DATABASE_URL'))
 }
+
 
 
 # Password validation

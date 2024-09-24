@@ -3,8 +3,8 @@ from django.urls import path
 from api import views
 
 urlpatterns = [
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/token/', TokenObtainPairView.as_view(), name='api_token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='api_token_refresh'),
 
     path('api/assets/', views.AssetsListView.as_view(), name='api_assets_list'),
     path('api/transactions/', views.TransactionsListView.as_view(), name='api_transactions_list'),
